@@ -28,8 +28,26 @@ def depthFirstSearch(problem: SearchProblem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    # TODO: Add your code here
-    return 
+    stack = utils.Stack()
+    visited = set()
+    nodo_ini = problem.getStartState()
+    stack.push((nodo_ini, []))
+    print(nodo_ini,'Nodo ini nig')
+    while not stack.isEmpty():
+        state =  stack.pop()
+        vecinos = problem.getSuccessors(state[0])
+        if (problem.isGoalState(state[0])):
+            
+            return state[1]
+        else:
+            for veci in vecinos:
+                new_path = state[1] + [veci[1]]
+                if(veci not in visited):
+                    visited.add(veci)
+                    stack.push((veci[0], new_path))
+                    
+    return []
+    
  #   utils.raiseNotDefined()
 
 
@@ -38,7 +56,26 @@ def breadthFirstSearch(problem: SearchProblem):
     Search the shallowest nodes in the search tree first.
     """
     # TODO: Add your code here
-    utils.raiseNotDefined()
+    queue = utils.Queue()
+    node_ini = problem.getStartState()
+    visited = set()
+    queue.push((node_ini, []))
+    while not queue.isEmpty():
+        state = queue.pop()
+        if (problem.isGoalState(state[0])):
+            return state[1]
+        if(state[0] not in visited):
+            visited.add(state[0])
+            vecinos = problem.getSuccessors(state[0])
+            print("esto es un vecino nigg", vecinos)
+            for veci in vecinos:
+                new_path = state[1] + [veci[1]]
+                queue.push((veci[0], new_path))
+    return []
+            
+            
+        
+ 
 
 
 def uniformCostSearch(problem: SearchProblem):

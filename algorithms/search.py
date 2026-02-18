@@ -137,8 +137,7 @@ def uniformCostSearch(problem: SearchProblem):
                 print(veci, "Eso es un veci")
                 print(veci[1], "Eso es un veci 1")
                 print(veci[0], "Eso es un veci 0")
-                costo_acci2 = problem.getCostOfActions(state[1])
-                prio_queue.push((veci[0], new_path), veci[2])
+                prio_queue.push((veci[0], new_path), new_path)
 
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):

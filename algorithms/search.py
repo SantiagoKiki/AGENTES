@@ -78,41 +78,67 @@ def breadthFirstSearch(problem: SearchProblem):
  
 
 
-def uniformCostSearch(problem: SearchProblem):
-    """
-    Search the node of least total cost first.
-    """
-    prio_queue = utils.PriorityQueue()
-    valor = 0
-    visitados = set()
-    ruta = []
-    state = problem.getStartState()
-    while not prio_queue.isEmpty() or valor != 1:
-        vecinos = problem.getSuccessors(state)
-        print("Esto es un state 0", state)
-        if valor == 0:
-            prio_queue.push(state, 0)
-            state = (state, 0)
-        print("Esto es un estado", state)
-        print(vecinos)
-        valor +=1
-        for veci in vecinos:
-            print("Esto es uin vecino: ", veci)
-            if(problem.isGoalState(veci[0])):
-                return ruta
-            if(veci not in visitados):
-                visitados.add(veci)
-                print("Esto es un estado :)", state)
-                print("Esto es un estado 1", state[1])
-                prio_queue.push(veci[0],veci[2])
-            else:
-                pass
-        state = prio_queue.pop()
-        ruta.append(state[1])
+# def uniformCostSearch(problem: SearchProblem):
+#     """
+#     Search the node of least total cost first.
+#     """
+#     prio_queue = utils.PriorityQueue()
+#     valor = 0
+#     visitados = set()
+#     rutica =    []
+#     state = problem.getStartState()
+#     while not prio_queue.isEmpty() or valor != 1:
+#         print("Esto es un state 0", state)
+#         if valor == 0:
+#             prio_queue.push((state, []), 0)
+#             state = ((state, []), 0)
+#             print("Estado ele o ele", state)
+#             vecinos = problem.getSuccessors(state[0][0])
+#             valor +=1
+#         else:
+#             print("Else", state[0])
+#             vecinos = problem.getSuccessors(state)
+
+#         print("Esto es un estado", state)
+#         print(vecinos)
         
+#         for veci in vecinos:
+#             print("Esto es uin vecino: ", veci)
+#             if(problem.isGoalState(veci[0])):
+#                 return rutica
+#             if(veci not in visitados):
+#                 visitados.add(veci[0])
+#                 print("Esto es un vecino :)", veci)
+#                 newpath = rutica + [veci[1]]
+#         prio_queue.push((veci[0], newpath),veci[2])
+#         state, rutica = prio_queue.pop()
+
+
    
     # TODO: Add your code here
-    
+
+
+def uniformCostSearch(problem: SearchProblem):
+    nodo_ini = problem.getStartState()
+    prio_queue = utils.PriorityQueue()
+    visitados = set()
+    prio_queue.push((nodo_ini, []), 0)
+    while not prio_queue.isEmpty():
+        state = prio_queue.pop()
+        print("Hola esto es un estado palestino (no israel)", state)
+        if problem.isGoalState(state[0]):
+            return state[1]
+        if state[0] not in visitados:
+            visitados.add(state[0])
+            costo_acci = problem.getCostOfActions(state[1])
+            vecinos = problem.getSuccessors(state[0])
+            for veci in vecinos:
+                new_path = state[1] + [veci[1]]
+                print(veci, "Eso es un veci")
+                print(veci[1], "Eso es un veci 1")
+                print(veci[0], "Eso es un veci 0")
+                costo_acci2 = problem.getCostOfActions(state[1])
+                prio_queue.push((veci[0], new_path), veci[2])
 
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):

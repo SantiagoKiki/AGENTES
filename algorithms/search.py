@@ -32,7 +32,6 @@ def depthFirstSearch(problem: SearchProblem):
     visited = set()
     nodo_ini = problem.getStartState()
     stack.push((nodo_ini, []))
-    print(nodo_ini,'Nodo ini nig')
     while not stack.isEmpty():
         state =  stack.pop()
         vecinos = problem.getSuccessors(state[0])
@@ -62,12 +61,13 @@ def breadthFirstSearch(problem: SearchProblem):
     queue.push((node_ini, []))
     while not queue.isEmpty():
         state = queue.pop()
+        print("Esto es un estado",state)
+
         if (problem.isGoalState(state[0])):
             return state[1]
         if(state[0] not in visited):
             visited.add(state[0])
             vecinos = problem.getSuccessors(state[0])
-            print("esto es un vecino nigg", vecinos)
             for veci in vecinos:
                 new_path = state[1] + [veci[1]]
                 queue.push((veci[0], new_path))
@@ -82,9 +82,37 @@ def uniformCostSearch(problem: SearchProblem):
     """
     Search the node of least total cost first.
     """
-
+    prio_queue = utils.PriorityQueue()
+    valor = 0
+    visitados = set()
+    ruta = []
+    state = problem.getStartState()
+    while not prio_queue.isEmpty() or valor != 1:
+        vecinos = problem.getSuccessors(state)
+        print("Esto es un state 0", state)
+        if valor == 0:
+            prio_queue.push(state, 0)
+            state = (state, 0)
+        print("Esto es un estado", state)
+        print(vecinos)
+        valor +=1
+        for veci in vecinos:
+            print("Esto es uin vecino: ", veci)
+            if(problem.isGoalState(veci[0])):
+                return ruta
+            if(veci not in visitados):
+                visitados.add(veci)
+                print("Esto es un estado :)", state)
+                print("Esto es un estado 1", state[1])
+                prio_queue.push(veci[0],veci[2])
+            else:
+                pass
+        state = prio_queue.pop()
+        ruta.append(state[1])
+        
+   
     # TODO: Add your code here
-    utils.raiseNotDefined()
+    
 
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):

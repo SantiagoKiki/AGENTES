@@ -125,7 +125,7 @@ def uniformCostSearch(problem: SearchProblem):
     prio_queue.push((nodo_ini, []), 0)
     while not prio_queue.isEmpty():
         state = prio_queue.pop()
-        print("Hola esto es un estado palestino (no israel)", state)
+        print(state)
         if problem.isGoalState(state[0]):
             return state[1]
         if state[0] not in visitados:

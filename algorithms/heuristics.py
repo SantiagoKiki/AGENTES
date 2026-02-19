@@ -47,4 +47,6 @@ def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):
     - Balance heuristic strength vs. computation time (do experiments!)
     """
     # TODO: Add your code here
-    utils.raiseNotDefined()
+    multi = problem.startingMissionState()
+    for i in multi:
+        print(i)

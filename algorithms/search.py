@@ -1,7 +1,7 @@
 from algorithms.problems import SearchProblem
 import algorithms.utils as utils
 from world.game import Directions
-from algorithms.heuristics import euclideanHeuristic, manhattanHeuristic, nullHeuristic
+from algorithms.heuristics import euclideanHeuristic, manhattanHeuristic, nullHeuristic, survivorHeuristic
 
 
 def tinyHouseSearch(problem: SearchProblem):
@@ -140,7 +140,7 @@ def uniformCostSearch(problem: SearchProblem):
                 prio_queue.push((veci[0], new_path), costo)
 
 
-def aStarSearch(problem: SearchProblem, heuristic=euclideanHeuristic):
+def aStarSearch(problem: SearchProblem, heuristic=manhattanHeuristic):
     """
     Search the node that has the lowest combined cost and heuristic first.
     """
@@ -154,7 +154,6 @@ def aStarSearch(problem: SearchProblem, heuristic=euclideanHeuristic):
         state, ruta_actual = prio_queue.pop()
         vecinos = problem.getSuccessors(state)
         for veci, dirrec, costo_veci in vecinos:
-            print("Esto es un veci", veci)
             new_path = ruta_actual+ [dirrec]
             if veci not in diccionario_costos:
                 diccionario_costos[veci]= 1000

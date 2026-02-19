@@ -1,7 +1,7 @@
 from algorithms.problems import SearchProblem
 import algorithms.utils as utils
 from world.game import Directions
-from algorithms.heuristics import nullHeuristic
+from algorithms.heuristics import euclideanHeuristic, manhattanHeuristic, nullHeuristic
 
 
 def tinyHouseSearch(problem: SearchProblem):
@@ -61,8 +61,6 @@ def breadthFirstSearch(problem: SearchProblem):
     queue.push((node_ini, []))
     while not queue.isEmpty():
         state = queue.pop()
-        print("Esto es un estado",state)
-
         if (problem.isGoalState(state[0])):
             return state[1]
         if(state[0] not in visited):
@@ -71,6 +69,7 @@ def breadthFirstSearch(problem: SearchProblem):
             for veci in vecinos:
                 new_path = state[1] + [veci[1]]
                 queue.push((veci[0], new_path))
+        print("Esto es goal:  ", problem.goal)
     return []
             
             
@@ -141,13 +140,35 @@ def uniformCostSearch(problem: SearchProblem):
                 prio_queue.push((veci[0], new_path), costo)
 
 
-def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
+def aStarSearch(problem: SearchProblem, heuristic=euclideanHeuristic):
     """
     Search the node that has the lowest combined cost and heuristic first.
     """
     # TODO: Add your code here
-    utils.raiseNotDefined()
-
+    node_ini = problem.getStartState()
+    diccionario_costos = {}
+    diccionario_costos[node_ini]= 0
+    prio_queue = utils.PriorityQueue()
+    prio_queue.push((node_ini, []), diccionario_costos[node_ini]+ 0)
+    while not prio_queue.isEmpty():
+        state, ruta_actual = prio_queue.pop()
+        vecinos = problem.getSuccessors(state)
+        for veci, dirrec, costo_veci in vecinos:
+            print("Esto es un veci", veci)
+            new_path = ruta_actual+ [dirrec]
+            if veci not in diccionario_costos:
+                diccionario_costos[veci]= 1000
+            ruta_veci_nodo = problem.getCostOfActions(ruta_actual+[dirrec])
+            if (ruta_veci_nodo<= diccionario_costos[veci]):
+                diccionario_costos[veci] = ruta_veci_nodo
+                prio_queue.push((veci, new_path),  heuristic(veci, problem)+diccionario_costos[veci]) 
+            if problem.isGoalState(state):
+                return ruta_actual
+            
+    
+    return []
+            
+            
 
 # Abbreviations (you can use them for the -f option in main.py)
 bfs = breadthFirstSearch

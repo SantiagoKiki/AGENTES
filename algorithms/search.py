@@ -133,9 +133,7 @@ def uniformCostSearch(problem: SearchProblem):
             vecinos = problem.getSuccessors(state[0])
             for veci in vecinos:
                 new_path = state[1] + [veci[1]]
-                print(veci, "Eso es un veci")
-                print(veci[1], "Eso es un veci 1")
-                print(veci[0], "Eso es un veci 0")
+
                 costo = problem.getCostOfActions(new_path)
                 prio_queue.push((veci[0], new_path), costo)
 
@@ -145,26 +143,24 @@ def aStarSearch(problem: SearchProblem, heuristic=manhattanHeuristic):
     Search the node that has the lowest combined cost and heuristic first.
     """
     # TODO: Add your code here
-    node_ini = problem.getStartState()
-    diccionario_costos = {}
-    diccionario_costos[node_ini]= 0
+    nodo_ini = problem.getStartState()
     prio_queue = utils.PriorityQueue()
-    prio_queue.push((node_ini, []), diccionario_costos[node_ini]+ 0)
+    visitados = set()
+    prio_queue.push((nodo_ini, []), 0)
     while not prio_queue.isEmpty():
-        state, ruta_actual = prio_queue.pop()
-        vecinos = problem.getSuccessors(state)
-        for veci, dirrec, costo_veci in vecinos:
-            new_path = ruta_actual+ [dirrec]
-            if veci not in diccionario_costos:
-                diccionario_costos[veci]= 1000
-            ruta_veci_nodo = problem.getCostOfActions(ruta_actual+[dirrec])
-            if (ruta_veci_nodo<= diccionario_costos[veci]):
-                diccionario_costos[veci] = ruta_veci_nodo
-                prio_queue.push((veci, new_path),  heuristic(veci, problem)+diccionario_costos[veci]) 
-            if problem.isGoalState(state):
-                return ruta_actual
+        state = prio_queue.pop()
+        print(state)
+        if problem.isGoalState(state[0]):
+            return state[1]
+        if state[0] not in visitados:
+            visitados.add(state[0])
+            vecinos = problem.getSuccessors(state[0])
+            for veci in vecinos:
+                new_path = state[1] + [veci[1]]
+                costo = problem.getCostOfActions(new_path)
+                prio_queue.push((veci[0], new_path), costo+heuristic(state[0], problem))
             
-    
+
     return []
             
             

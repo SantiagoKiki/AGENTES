@@ -86,22 +86,33 @@ def breadthFirstSearch(problem: SearchProblem):
 
 def uniformCostSearch(problem):
     nodoIni = problem.getStartState()
+
     prio_queue = utils.PriorityQueue() # cola de prioridad 
+
     visitados = set() # marco los nodos visitados para no ciclar
+
     prio_queue.push((nodoIni, []), 0) # inserto el nodo inicial con costo 0
-    while not prio_queue.isEmpty(): # mientras la cola de prioridad 
+
+    while not prio_queue.isEmpty(): # mientras la cola de prioridad no este vacia
         state = prio_queue.pop() # popeo el estado segun la cola de prioridad 
+
         #print(state) 
         if problem.isGoalState(state[0]): #Pregunto el caso base si si o en caso de que ya lo encontré con el pop
+
             return state[1] # devuelvo el camino
         if state[0] not in visitados: # si no está marcado 
+
             visitados.add(state[0]) # lo marco como visitado y lo proceso
+
             costo_acci = problem.getCostOfActions(state[1]) 
+
             vecinos = problem.getSuccessors(state[0]) # obtengo los vecinos del nodo actual
             for veci in vecinos: # para cada vecino del nodo actual
+
                 new_path = state[1] + [veci[1]] # genero el nuevo camino a ese vecino 
 
                 costo = problem.getCostOfActions(new_path) # calculo el costo del nuevo camino a ese vecino
+
                 prio_queue.push((veci[0], new_path), costo) # lo meto en la cola de prioridad.
     return [] 
 

@@ -50,52 +50,51 @@ def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):
     - Balance heuristic strength vs. computation time (do experiments!)
     """
     position, survivors_grid = state
-    survivors = survivors_grid.asList()
-    
+    survivors = get_survivor_positions(survivors_grid)
     if not survivors:
         return 0
+    min_dist = min(
+        abs(position[0] - s[0]) + abs(position[1] - s[1])
+        for s in survivors
+    )
+    key = tuple(sorted(survivors))
+    if key not in problem.heuristicInfo:
+        problem.heuristicInfo[key] = mst_cost(survivors)
+    mst = problem.heuristicInfo[key]
+    return min_dist + mst
+    
 
-    # Distancia Manhattan al sobreviviente más cercano osea p1 a p2 
-    for s in survivors:
-        dist = _manhattan_distance(position, s)
-        if dist < float("inf"):
-            nearest = dist
-
-    # 2) MST 
+def mst_cost(points):
+    """
+    Computes the MST cost of a set of points using Manhattan distance.
+    
+    points: list of (x, y)
+    return: total MST cost
+    """
+    if not points:
+        return 0
     visited = set()
-    mst_cost = 0
-    pq = utils.PriorityQueue()
-    
-    start = survivors[0]
-    visited.add(start)
-    
-    initial_nodes = []
-    for node in survivors:
-        if node != start:
-            initial_nodes.append(node)
-    
-    for node in initial_nodes:
-        dist = _manhattan_distance(start, node)
-        pq.push((start, node), dist)
-    
-    # Prim 
-    while len(visited) < len(survivors):
-        from_node, to_node = pq.pop()
-        
-        if to_node not in visited:
-            # Agregar arista al MST
-            dist = _manhattan_distance(from_node, to_node)
-            mst_cost += dist
-            
-            visited.add(to_node)
-   
-            unvisited_nodes = []
-            for node in survivors:
-                if node not in visited:
-                    unvisited_nodes.append(node)
-            
-            for node in unvisited_nodes:
-                dist = _manhattan_distance(to_node, node)
-                pq.push((to_node, node), dist)
-    
-    return nearest + mst_cost
+    visited.add(points[0])
+    distances = {}
+    for p in points[1:]:
+        distances[p] = abs(points[0][0] - p[0]) + abs(points[0][1] - p[1])
+    total_cost = 0
+    while len(visited) < len(points):
+        closest_point = min(distances, key=distances.get)
+        min_dist = distances[closest_point]
+        total_cost += min_dist
+        visited.add(closest_point)
+        del distances[closest_point]
+        for p in distances:
+            new_dist = abs(closest_point[0] - p[0]) + abs(closest_point[1] - p[1])
+            if new_dist < distances[p]:
+                distances[p] = new_dist
+    return total_cost
+
+def get_survivor_positions(survivors_grid):
+    positions = []
+    for x in range(survivors_grid.width):
+        for y in range(survivors_grid.height):
+            if survivors_grid[x][y]:
+                positions.append((x, y))
+    return positions

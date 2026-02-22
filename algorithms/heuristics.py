@@ -47,24 +47,17 @@ def survivorHeuristic(state: Tuple[Tuple, Any], problem: MultiSurvivorProblem):
     - Balance heuristic strength vs. computation time (do experiments!)
     """
     position, survivors_grid = state
-
     survivors = get_survivor_positions(survivors_grid)
-
     if not survivors:
         return 0
-
     min_dist = min(
         abs(position[0] - s[0]) + abs(position[1] - s[1])
         for s in survivors
     )
-
     key = tuple(sorted(survivors))
-
     if key not in problem.heuristicInfo:
         problem.heuristicInfo[key] = mst_cost(survivors)
-
     mst = problem.heuristicInfo[key]
-
     return min_dist + mst
     
 
@@ -75,51 +68,30 @@ def mst_cost(points):
     points: list of (x, y)
     return: total MST cost
     """
-
     if not points:
         return 0
-
-    # Set of visited points
     visited = set()
-
-    # Start from first point
     visited.add(points[0])
-
-    # Distances to MST
     distances = {}
-
     for p in points[1:]:
         distances[p] = abs(points[0][0] - p[0]) + abs(points[0][1] - p[1])
-
     total_cost = 0
-
     while len(visited) < len(points):
-
-        # Find closest non-visited point
         closest_point = min(distances, key=distances.get)
         min_dist = distances[closest_point]
-
         total_cost += min_dist
         visited.add(closest_point)
-
         del distances[closest_point]
-
-        # Update distances
         for p in distances:
             new_dist = abs(closest_point[0] - p[0]) + abs(closest_point[1] - p[1])
             if new_dist < distances[p]:
                 distances[p] = new_dist
-
     return total_cost
-
-
 
 def get_survivor_positions(survivors_grid):
     positions = []
-
     for x in range(survivors_grid.width):
         for y in range(survivors_grid.height):
             if survivors_grid[x][y]:
                 positions.append((x, y))
-
     return positions

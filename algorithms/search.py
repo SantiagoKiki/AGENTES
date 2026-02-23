@@ -28,94 +28,60 @@ def depthFirstSearch(problem: SearchProblem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
+    # TODO: Add your code here
     stack = utils.Stack()
     visited = set()
-    nodo_ini = problem.getStartState()
-    stack.push((nodo_ini, []))
+    start = problem.getStartState()
+
+    stack.push((start, []))
     while not stack.isEmpty():
-        state =  stack.pop()
-        vecinos = problem.getSuccessors(state[0])
-        if (problem.isGoalState(state[0])):
-            
-            return state[1]
-        else:
-            for veci in vecinos:
-                new_path = state[1] + [veci[1]]
-                if(veci not in visited):
-                    visited.add(veci)
-                    stack.push((veci[0], new_path))
-                    
+        state, path = stack.pop()
+
+        if problem.isGoalState(state):
+            return path
+        
+        if state not in visited:
+            visited.add(state)
+
+            for succesor, action, cost in problem.getSuccessors(state):
+                new_path = path + [action]
+                stack.push((succesor, new_path))
+                
+    # print(problem)
+    utils.raiseNotDefined()
     return []
-    
- #   utils.raiseNotDefined()
+        
+
 
 
 def breadthFirstSearch(problem: SearchProblem):
     """
     Search the shallowest nodes in the search tree first.
     """
-    # TODO: Add your code here
-    queue = utils.Queue()
-    node_ini = problem.getStartState()
+    stack = utils.Queue()
     visited = set()
-    queue.push((node_ini, []))
-    while not queue.isEmpty():
-        state = queue.pop()
-        if (problem.isGoalState(state[0])):
-            return state[1]
-        if(state[0] not in visited):
-            visited.add(state[0])
-            vecinos = problem.getSuccessors(state[0])
-            for veci in vecinos:
-                new_path = state[1] + [veci[1]]
-                queue.push((veci[0], new_path))
-        print("Esto es goal:  ", problem.goal)
+    start = problem.getStartState()
+
+    stack.push((start, []))
+    while not stack.isEmpty():
+        state, path = stack.pop()
+
+        if problem.isGoalState(state):
+            return path
+        
+        if state not in visited:
+            visited.add(state)
+
+            for succesor, action, cost in problem.getSuccessors(state):
+                new_path = path + [action]
+                stack.push((succesor, new_path))
+                
+    # print(problem)
+    utils.raiseNotDefined()
     return []
             
             
         
- 
-
-
-# def uniformCostSearch(problem: SearchProblem):
-#     """
-#     Search the node of least total cost first.
-#     """
-#     prio_queue = utils.PriorityQueue()
-#     valor = 0
-#     visitados = set()
-#     rutica =    []
-#     state = problem.getStartState()
-#     while not prio_queue.isEmpty() or valor != 1:
-#         print("Esto es un state 0", state)
-#         if valor == 0:
-#             prio_queue.push((state, []), 0)
-#             state = ((state, []), 0)
-#             print("Estado ele o ele", state)
-#             vecinos = problem.getSuccessors(state[0][0])
-#             valor +=1
-#         else:
-#             print("Else", state[0])
-#             vecinos = problem.getSuccessors(state)
-
-#         print("Esto es un estado", state)
-#         print(vecinos)
-        
-#         for veci in vecinos:
-#             print("Esto es uin vecino: ", veci)
-#             if(problem.isGoalState(veci[0])):
-#                 return rutica
-#             if(veci not in visitados):
-#                 visitados.add(veci[0])
-#                 print("Esto es un vecino :)", veci)
-#                 newpath = rutica + [veci[1]]
-#         prio_queue.push((veci[0], newpath),veci[2])
-#         state, rutica = prio_queue.pop()
-
-
-   
-    # TODO: Add your code here
-
 
 def uniformCostSearch(problem: SearchProblem):
     nodo_ini = problem.getStartState()

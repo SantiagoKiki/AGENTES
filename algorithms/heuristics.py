@@ -4,6 +4,11 @@ from algorithms import utils
 from algorithms.problems import MultiSurvivorProblem
 
 
+def _manhattan_distance(p1, p2):
+    """Calcula distancia Manhattan entre dos puntos."""
+    return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
+
+
 def nullHeuristic(state, problem=None):
     """
     A heuristic function estimates the cost from the current state to the nearest
@@ -16,10 +21,8 @@ def manhattanHeuristic(state, problem):
     """
     The Manhattan distance heuristic.
     """
-    # TODO: Add your code here
     objetivo = problem.goal
-    distancia_manhattan = abs(state[0]-objetivo[0]) + abs(state[1]-objetivo[1])
-    return distancia_manhattan
+    return _manhattan_distance(state, objetivo)
 
 
 def euclideanHeuristic(state, problem):

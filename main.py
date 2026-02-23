@@ -47,7 +47,7 @@ def readCommand(argv):
         dest="heuristic",
         help=default("Heuristic function name (for A*). e.g. nullHeuristic, manhattanHeuristic"),
         metavar="HEURISTIC",
-        default="manhattanHeuristic",
+        default="survivorHeuristic",
     )
     parser.add_option(
         "-l",
